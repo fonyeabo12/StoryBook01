@@ -28,9 +28,9 @@ router.post('/',ensureAuth, async(req, res) => {
 
 //@desc Show all stories
 //@route GET/stories
-router.get('/',ensureAuth, async (req, res) => {
+router.get('/', ensureAuth, async (req, res) => {
     try {
-        const stories = await Story.find({status: 'public '})
+        const stories = await Story.find({ status: 'public' })
             .populate('user')
             .sort({ createdAt: 'desc' })
             .lean()
@@ -44,6 +44,29 @@ router.get('/',ensureAuth, async (req, res) => {
     }
 
 })
+
+
+//@desc Show edit page
+//@route GET/stories/edit/:id
+router.get('/edit/:id',ensureAuth, async(req, res) => {
+    const story = await Story.findOne({
+        _id: req.params.id
+    }).lean()
+
+    if (!story) {
+       return res.render('error/404')
+    }
+
+    if(story.uer != req.user.id) {
+        res.redirect('/stories')
+    } else {
+        res.render('stories/edit', {
+            story,
+        })
+    }
+    
+})
+
 
 
 
