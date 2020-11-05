@@ -27,7 +27,7 @@ app.use(express.json())
 //Method override
 app.use(
     methodOverride(function (req, res) {
-if ( req.body && typeof req.body === 'object' && 'method' in req.body) {
+if ( req.body && typeof req.body === 'object' && '_method' in req.body) {
     // look in urlencoded POST bodies and delte it
     let method = req.body._method
     delete req.body._method
